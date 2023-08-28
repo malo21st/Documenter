@@ -1,12 +1,12 @@
 """ env\Scripts\Activate.ps1 """
+import streamlit as st
 import os
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
-import streamlit as st
 from llama_index import LLMPredictor, ServiceContext, StorageContext, load_index_from_storage, QuestionAnswerPrompt
 from langchain.chat_models import ChatOpenAI
 import fitz  # PyMuPDF
 
-pdf_path = "/workspaces/chatpdf/pptx_to_index/static/NOBDATA_ChatGPT活用個別サービス開発資料.pdf"
+pdf_path = "./static/NOBDATA_ChatGPT活用個別サービス開発資料.pdf"
 
 INTRO = "左側のテキストボックスに質問を入力しエンターキーを押すと、ＡＩが回答します。"
 
@@ -32,7 +32,7 @@ QA_PROMPT = QuestionAnswerPrompt(QA_PROMPT_TMPL)
 def load_vector_db():
     llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", streaming=True))
     service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
-    storage_context = StorageContext.from_defaults(persist_dir="./pptx_to_index/storage/")
+    storage_context = StorageContext.from_defaults(persist_dir="./storage/")
     index = load_index_from_storage(storage_context, service_context=service_context)
     return index
 
