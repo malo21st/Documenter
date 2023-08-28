@@ -1,2 +1,3 @@
 llama_index
 PyMuPDF
+nltk
