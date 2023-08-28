@@ -1,6 +1,6 @@
 """ env\Scripts\Activate.ps1 """
 import os
-os.environ["OPENAI_API_KEY"] = ""
+os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 import streamlit as st
 from llama_index import LLMPredictor, ServiceContext, StorageContext, load_index_from_storage, QuestionAnswerPrompt
 from langchain.chat_models import ChatOpenAI
