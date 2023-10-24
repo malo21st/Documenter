@@ -149,7 +149,7 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
         st.session_state.qa["history"].append({"role": "E", "msg": error_msg})
 
     with pdf_page:
-        with st.expander(f"スライド表示"):
+        with st.expander(f"表示"):
             file_name = st.session_state.metadata["file_name"]
             slide_num = st.session_state.metadata["slide_num"]
             text_cntx = st.session_state.metadata["text"]
