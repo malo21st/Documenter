@@ -68,8 +68,7 @@ def first_slide(docu_type):
 def get_pdf_image(docu_type, page):
     pdf_path = docu_to_pdf_path[docu_type]
     pdf_document = fitz.open(pdf_path)
-    p_num = int(page) if docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)" else int(page) - 1
-    page_data = pdf_document.load_page(p_num)
+    page_data = pdf_document.load_page(page)
     image = page_data.get_pixmap()
     image_data = image.tobytes("png")
     return image_data
@@ -153,10 +152,11 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
             file_name = st.session_state.metadata["file_name"]
             slide_num = st.session_state.metadata["slide_num"]
             text_cntx = st.session_state.metadata["text"]
-            image_data = get_pdf_image(docu_type, slide_num)
+            page_num = int(slide_num) if docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)" else int(slide_num) - 1
+            image_data = get_pdf_image(docu_type, page_num)
             # pdf_document = fitz.open(pdf_path)            
             # slide_data = pdf_document.load_page(slide_num)
             # image = slide_data.get_pixmap()
             # image_data = image.tobytes("png")
-            st.image(image_data, caption=f"#{slide_num}　{file_name}", use_column_width="auto")
+            st.image(image_data, caption=f"#{page_num}　{file_name}", use_column_width="auto")
             # st.write(text_cntx)
