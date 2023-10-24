@@ -5,10 +5,11 @@ os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 from llama_index import LLMPredictor, ServiceContext, StorageContext, load_index_from_storage, QuestionAnswerPrompt
 from langchain.chat_models import ChatOpenAI
 import fitz  # PyMuPDF
+from PIL import Image
 
 st.set_page_config(
     page_title = "Documenter",
-    page_icon = st.image("./static/documenter.png"),
+    page_icon = Image.open("./static/documenter.png"),
     initial_sidebar_state="expanded",
 )
 
