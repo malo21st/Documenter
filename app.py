@@ -136,7 +136,8 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
         slide_num = int(response.source_nodes[0].node.metadata["slide_num"])
         text_cntx = response.source_nodes[0].node.text
         score = response.source_nodes[0].score
-        refer_pages = f"\n\n#{slide_num}　{file_name}\n\n\n"
+        page_num = int(slide_num) if docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)" else int(slide_num) - 1
+        refer_pages = f"\n\n#{page_num}　{file_name}\n\n\n"
         chat_box.write(text + refer_pages)
         st.session_state.qa["history"].append({"role": "A", "msg": text + refer_pages})
         st.session_state.metadata["file_name"] = file_name
