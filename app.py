@@ -58,12 +58,12 @@ if st.sidebar.button("ＡＩおしゃべりロボって何ですか"):
     st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおしゃべりロボって何ですか"})
 if st.sidebar.button("ＡＩおりこうロボって何ですか"):
     st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおりこうロボって何ですか"})
-if st.sidebar.button("文章対話ＡＩって何ですか"):
+if st.sidebar.button("Documenterって何ですか"):
     st.session_state.qa["history"].append({"role": "Q", "msg": "文章対話ＡＩって何ですか"})
-if st.sidebar.button("業務フィットＡＩって何ですか"):
+if st.sidebar.button("プロンプトセッターって何ですか"):
     st.session_state.qa["history"].append({"role": "Q", "msg": "業務フィットＡＩって何ですか"})
 slide_img = first_slide()
-st.sidebar.image(slide_img, caption="NOBDATA_ChatGPT活用個別サービス開発資料.pdf", use_column_width="auto")
+st.sidebar.image(slide_img, caption="NOBDATA_ChatGPT活用個別サービス開発資料.pptx", use_column_width="auto")
 
 ## Main Content
 for message in st.session_state.qa["history"]:
