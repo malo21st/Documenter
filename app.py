@@ -27,8 +27,8 @@ if "qa" not in st.session_state:
 if "metadata" not in st.session_state:
     st.session_state["metadata"] = {"file_name": "", "slide_num": 0, "text": "", "score": ""}
 
-if "pdf_page" not in st.session_state:
-    st.session_state.pdf_page = list()
+# if "pdf_page" not in st.session_state:
+#     st.session_state.pdf_page = list()
 
 if "docu_index" not in st.session_state:
     st.session_state.docu_index = 0
