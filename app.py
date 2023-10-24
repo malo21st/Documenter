@@ -52,7 +52,7 @@ def store_del_msg():
 # View (User Interface)
 ## Sidebar
 # st.sidebar.title("Documenter Demo")
-st.sidebar.image("documenter_logo.png", use_column_width="auto")
+st.sidebar.image("./app/static/documenter_logo.png", use_column_width="auto")
 user_input = st.sidebar.text_input("質問をどうぞ", key="user_input", on_change=store_del_msg)
 st.sidebar.markdown("---")
 if st.sidebar.button("ＡＩおしゃべりロボって何ですか"):
