@@ -13,7 +13,11 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-pdf_path = "./static/NOBDATA_ChatGPT活用個別サービス開発資料.pdf"
+# pdf_path = "./static/NOBDATA_ChatGPT活用個別サービス開発資料.pdf"
+
+type_to_index = {"展示会出展助成事業(PDF)":0, "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)":1}
+type_to_path = {"展示会出展助成事業(PDF)":"./storage_pdf/", "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)":"./storage/"}
+docu_to_pdf_path = {"展示会出展助成事業(PDF)":"./static/R5_tenjikaijyosei_boshuyoko_230403.pdf", "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)":"./static/NOBDATA_ChatGPT活用個別サービス開発資料.pdf"}
 
 INTRO = "左側のテキストボックスに質問を入力しエンターキーを押すと、ＡＩが回答します。"
 
@@ -22,6 +26,9 @@ if "qa" not in st.session_state:
 
 if "metadata" not in st.session_state:
     st.session_state["metadata"] = {"file_name": "", "slide_num": 0, "text": "", "score": ""}
+
+if "docu_index" not in st.session_state:
+    st.session_state.docu_index = 0
 
 # Prompt
 QA_PROMPT_TMPL = (
@@ -36,10 +43,12 @@ QA_PROMPT_TMPL = (
 QA_PROMPT = QuestionAnswerPrompt(QA_PROMPT_TMPL)
 
 @st.cache_resource
-def load_vector_db():
-    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", streaming=True))
+def load_vector_db(docu_type):
+    db_path = type_to_path[docu_type]
+    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="gpt-3.5-turbo", streaming=True))
+    # llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="gpt-4", streaming=True))
     service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
-    storage_context = StorageContext.from_defaults(persist_dir="./storage/")
+    storage_context = StorageContext.from_defaults(persist_dir=db_path)
     index = load_index_from_storage(storage_context, service_context=service_context)
     return index
 
@@ -58,18 +67,30 @@ def store_del_msg():
 
 # View (User Interface)
 ## Sidebar
-# st.sidebar.title("Documenter Demo")
 st.sidebar.image("./static/documenter_logo.png", use_column_width="auto")
+
+docu_index = st.session_state.docu_index
+docu_type = st.sidebar.selectbox("文書を選んでください", ["展示会出展助成事業(PDF)", "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)"], index=docu_index)
+st.session_state.docu_index = type_to_index[docu_type]
+
 user_input = st.sidebar.text_input("質問をどうぞ", key="user_input", on_change=store_del_msg)
 st.sidebar.markdown("---")
-if st.sidebar.button("ＡＩおしゃべりロボって何ですか"):
-    st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおしゃべりロボって何ですか"})
-if st.sidebar.button("ＡＩおりこうロボって何ですか"):
-    st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおりこうロボって何ですか"})
-if st.sidebar.button("Documenterって何ですか"):
-    st.session_state.qa["history"].append({"role": "Q", "msg": "Documenterって何ですか"})
-if st.sidebar.button("プロンプトセッターって何ですか"):
-    st.session_state.qa["history"].append({"role": "Q", "msg": "プロンプトセッターって何ですか"})
+if docu_type == "展示会出展助成事業(PDF)":
+    if st.sidebar.button("助成事業の目的"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "助成事業の目的を教えて下さい。"})
+    if st.sidebar.button("助成対象の経費"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "助成対象の経費を教えて下さい。"})
+    if st.sidebar.button("申請手順（表形式）"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "申請手順を表にして下さい。"})
+elif docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)":
+    if st.sidebar.button("ＡＩおしゃべりロボって何ですか"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおしゃべりロボって何ですか"})
+    if st.sidebar.button("ＡＩおりこうロボって何ですか"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおりこうロボって何ですか"})
+    if st.sidebar.button("Documenterって何ですか"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "Documenterって何ですか"})
+    if st.sidebar.button("プロンプトセッターって何ですか"):
+        st.session_state.qa["history"].append({"role": "Q", "msg": "プロンプトセッターって何ですか"})
 slide_img = first_slide()
 st.sidebar.image(slide_img, caption="NOBDATA_ChatGPT活用個別サービス開発資料.pptx", use_column_width="auto")
 
@@ -85,7 +106,7 @@ chat_box = st.empty() # Streaming message
 pdf_page = st.container()
 
 # Model (Business Logic)
-index = load_vector_db()
+index = load_vector_db(docu_type)
 engine = index.as_query_engine(text_qa_template=QA_PROMPT, streaming=True, similarity_top_k=2)
 
 if st.session_state.qa["history"][-1]["role"] == "Q":
