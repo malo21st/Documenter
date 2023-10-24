@@ -56,7 +56,8 @@ def load_vector_db(docu_type):
     return index
 
 @st.cache_resource
-def first_slide():
+def first_slide(docu_type):
+    pdf_path = docu_to_pdf_path[docu_type]
     pdf_document = fitz.open(pdf_path)
     slide_data = pdf_document.load_page(0)
     image = slide_data.get_pixmap()
@@ -94,6 +95,8 @@ if docu_type == "展示会出展助成事業(PDF)":
         st.session_state.qa["history"].append({"role": "Q", "msg": "助成対象の経費を教えて下さい。"})
     if st.sidebar.button("申請手順（表形式）"):
         st.session_state.qa["history"].append({"role": "Q", "msg": "申請手順を表にして下さい。"})
+    slide_img = first_slide(docu_type)
+    st.sidebar.image(slide_img, caption="展示会出展助成事業(令和５年度　東京都).pdf", use_column_width="auto")
 elif docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)":
     if st.sidebar.button("ＡＩおしゃべりロボって何ですか"):
         st.session_state.qa["history"].append({"role": "Q", "msg": "ＡＩおしゃべりロボって何ですか"})
@@ -103,8 +106,8 @@ elif docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)":
         st.session_state.qa["history"].append({"role": "Q", "msg": "Documenterって何ですか"})
     if st.sidebar.button("プロンプトセッターって何ですか"):
         st.session_state.qa["history"].append({"role": "Q", "msg": "プロンプトセッターって何ですか"})
-slide_img = first_slide()
-st.sidebar.image(slide_img, caption="NOBDATA_ChatGPT活用個別サービス開発資料.pptx", use_column_width="auto")
+    slide_img = first_slide(docu_type)
+    st.sidebar.image(slide_img, caption="NOBDATA_ChatGPT活用個別サービス開発資料.pptx", use_column_width="auto")
 
 ## Main Content
 for message in st.session_state.qa["history"]:
@@ -149,7 +152,7 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
             file_name = st.session_state.metadata["file_name"]
             slide_num = st.session_state.metadata["slide_num"]
             text_cntx = st.session_state.metadata["text"]
-            pdf_image = get_pdf_image(docu_type, slide_num)
+            image_data = get_pdf_image(docu_type, slide_num)
             # pdf_document = fitz.open(pdf_path)            
             # slide_data = pdf_document.load_page(slide_num)
             # image = slide_data.get_pixmap()
