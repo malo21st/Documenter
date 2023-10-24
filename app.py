@@ -60,6 +60,15 @@ def first_slide():
     image_data = image.tobytes("png")
     return image_data
 
+@st.cache_data
+def get_pdf_image(docu_type, page):
+    pdf_path = docu_to_pdf_path[docu_type]
+    pdf_document = fitz.open(pdf_path)
+    page_data = pdf_document.load_page(int(page))
+    image = page_data.get_pixmap()
+    image_data = image.tobytes("png")
+    return image_data
+    
 def store_del_msg():
     if st.session_state.user_input and st.session_state.qa["history"][-1]["role"] != "Q": # st.session_state.prev_q != st.session_state.user_input:
         st.session_state.qa["history"].append({"role": "Q", "msg": st.session_state.user_input}) # store
@@ -137,9 +146,10 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
             file_name = st.session_state.metadata["file_name"]
             slide_num = st.session_state.metadata["slide_num"]
             text_cntx = st.session_state.metadata["text"]
-            pdf_document = fitz.open(pdf_path)
-            slide_data = pdf_document.load_page(slide_num)
-            image = slide_data.get_pixmap()
-            image_data = image.tobytes("png")
+            pdf_image = get_pdf_image(docu_type, page)
+            # pdf_document = fitz.open(pdf_path)            
+            # slide_data = pdf_document.load_page(slide_num)
+            # image = slide_data.get_pixmap()
+            # image_data = image.tobytes("png")
             st.image(image_data, caption=f"#{slide_num}　{file_name}", use_column_width="auto")
             # st.write(text_cntx)
