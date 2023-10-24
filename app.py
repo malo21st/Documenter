@@ -87,7 +87,7 @@ docu_type = st.sidebar.selectbox("文書を選んでください", ["展示会�
 st.session_state.docu_index = type_to_index[docu_type]
 
 user_input = st.sidebar.text_input("質問をどうぞ", key="user_input", on_change=store_del_msg)
-st.sidebar.markdown("---")
+# st.sidebar.markdown("---")
 if docu_type == "展示会出展助成事業(PDF)":
     if st.sidebar.button("助成事業の目的"):
         st.session_state.qa["history"].append({"role": "Q", "msg": "助成事業の目的を教えて下さい。"})
