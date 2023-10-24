@@ -68,7 +68,8 @@ def first_slide(docu_type):
 def get_pdf_image(docu_type, page):
     pdf_path = docu_to_pdf_path[docu_type]
     pdf_document = fitz.open(pdf_path)
-    page_data = pdf_document.load_page(int(page))
+    p_num = int(page) if docu_type == "NOBDATA_ChatGPT活用個別サービス開発資料(PPTX)" else int(page) - 1
+    page_data = pdf_document.load_page(p_num)
     image = page_data.get_pixmap()
     image_data = image.tobytes("png")
     return image_data
