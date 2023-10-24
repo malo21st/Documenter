@@ -113,4 +113,4 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
             image = slide_data.get_pixmap()
             image_data = image.tobytes("png")
             st.image(image_data, caption=f"#{slide_num}　{file_name}", use_column_width="auto")
-            st.write(text_cntx)
+            # st.write(text_cntx)
