@@ -8,7 +8,7 @@ import fitz  # PyMuPDF
 
 st.set_page_config(
     page_title = "Documenter",
-    page_icon = Image.open("./static/documenter.png"),
+    page_icon = st.image("./static/documenter.png"),
     initial_sidebar_state="expanded",
 )
 
