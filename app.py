@@ -6,6 +6,12 @@ from llama_index import LLMPredictor, ServiceContext, StorageContext, load_index
 from langchain.chat_models import ChatOpenAI
 import fitz  # PyMuPDF
 
+st.set_page_config(
+    page_title = "Documenter",
+    page_icon = Image.open("./static/documenter.png"),
+    initial_sidebar_state="expanded",
+)
+
 pdf_path = "./static/NOBDATA_ChatGPT活用個別サービス開発資料.pdf"
 
 INTRO = "左側のテキストボックスに質問を入力しエンターキーを押すと、ＡＩが回答します。"
