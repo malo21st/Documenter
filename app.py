@@ -91,8 +91,8 @@ st.sidebar.markdown("---")
 if docu_type == "展示会出展助成事業(PDF)":
     if st.sidebar.button("助成事業の目的"):
         st.session_state.qa["history"].append({"role": "Q", "msg": "助成事業の目的を教えて下さい。"})
-    if st.sidebar.button("助成対象の経費"):
-        st.session_state.qa["history"].append({"role": "Q", "msg": "助成対象の経費を教えて下さい。"})
+    # if st.sidebar.button("助成対象の経費"):
+    #     st.session_state.qa["history"].append({"role": "Q", "msg": "助成対象の経費を教えて下さい。"})
     if st.sidebar.button("申請手順（表形式）"):
         st.session_state.qa["history"].append({"role": "Q", "msg": "申請手順を表にして下さい。"})
     slide_img = first_slide(docu_type)
