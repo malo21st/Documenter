@@ -27,6 +27,9 @@ if "qa" not in st.session_state:
 if "metadata" not in st.session_state:
     st.session_state["metadata"] = {"file_name": "", "slide_num": 0, "text": "", "score": ""}
 
+if "pdf_page" not in st.session_state:
+    st.session_state.pdf_page = list()
+
 if "docu_index" not in st.session_state:
     st.session_state.docu_index = 0
 
@@ -146,7 +149,7 @@ if st.session_state.qa["history"][-1]["role"] == "Q":
             file_name = st.session_state.metadata["file_name"]
             slide_num = st.session_state.metadata["slide_num"]
             text_cntx = st.session_state.metadata["text"]
-            pdf_image = get_pdf_image(docu_type, page)
+            pdf_image = get_pdf_image(docu_type, slide_num)
             # pdf_document = fitz.open(pdf_path)            
             # slide_data = pdf_document.load_page(slide_num)
             # image = slide_data.get_pixmap()
